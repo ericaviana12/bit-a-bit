@@ -2,32 +2,27 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#111111" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#222"/>
   <title>Bit a Bit</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json" />
 </head>
 <body>
-  <main>
+  <div class="container">
     <h1>Bit a Bit</h1>
-    <p class="sub">Transforme bits em número!</p>
-    <div id="alvo">Alvo: 0</div>
-
-    <div class="bits-wrapper">
-      <div class="bits" id="bits-top"></div>
-      <div class="bits" id="bits-bottom"></div>
-    </div>
-
-    <div id="numero">Seu número: 0</div>
-
-    <div id="mensagem"></div>
-
-    <button onclick="novoAlvo()">Novo Alvo</button>
-    <button onclick="resetarBits()">Resetar Bits</button>
-
-    <div id="recorde-info" class="recorde-box"></div>
-  </main>
+    <div id="alvo" class="info"></div>
+    <div id="bits-top" class="bits"></div>
+    <div id="bits-bottom" class="bits"></div>
+    <div id="numero" class="info"></div>
+    <div id="mensagem" class="mensagem"></div>
+    <div id="recorde-info" class="recordes"></div>
+  </div>
   <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
 </body>
 </html>
