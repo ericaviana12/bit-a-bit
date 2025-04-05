@@ -48,8 +48,9 @@
 
 ## Contribuindo
 
-Este projeto é feito com amor por **Érica Viana**.  
-Ideias, sugestões e melhorias são bem-vindas!  
+Este projeto é feito por **Érica Viana**.
+
+Ideias, sugestões e melhorias são bem-vindas!
 Entre em contato ou faça um fork!
 
 ---
