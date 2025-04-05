@@ -1,7 +1,5 @@
 let alvo = 0;
 let inicio;
-let melhorTempo = localStorage.getItem('melhorTempo') || null;
-let melhorJogador = localStorage.getItem('melhorJogador') || null;
 const bitsEl = document.getElementById('bits-container');
 
 function criarBits() {
@@ -30,28 +28,37 @@ function atualizarNumero() {
 
   if (num === alvo) {
     const tempo = ((Date.now() - inicio) / 1000).toFixed(2);
+
+    document.getElementById('numero').textContent = `Acertou! Tempo: ${tempo}s`;
+    document.getElementById('alvo').textContent = `Alvo alcançado!`;
+
     setTimeout(() => {
-      if (!melhorTempo || tempo < melhorTempo) {
-        const nome = prompt("Parabéns! Novo recorde! Digite seu nome:");
-        if (nome) {
-          melhorTempo = tempo;
-          melhorJogador = nome;
-          localStorage.setItem('melhorTempo', tempo);
-          localStorage.setItem('melhorJogador', nome);
-        }
-      }
+      salvarRecorde(tempo);
       mostrarRecorde();
       novaRodada();
-    }, 200);
+    }, 1500);
+  }
+}
+
+function salvarRecorde(tempo) {
+  let recordes = JSON.parse(localStorage.getItem('recordes')) || [];
+  const nome = prompt("Parabéns! Digite seu nome para registrar o tempo:");
+  if (nome) {
+    recordes.push({ nome, tempo: parseFloat(tempo) });
+    recordes.sort((a, b) => a.tempo - b.tempo);
+    recordes = recordes.slice(0, 3);
+    localStorage.setItem('recordes', JSON.stringify(recordes));
   }
 }
 
 function mostrarRecorde() {
   const r = document.getElementById('recorde-info');
-  if (melhorTempo && melhorJogador) {
-    r.innerHTML = `Recorde: ${melhorTempo}s por ${melhorJogador}`;
+  const recordes = JSON.parse(localStorage.getItem('recordes')) || [];
+  if (recordes.length > 0) {
+    r.innerHTML = "<strong>Top 3 Recordes:</strong><br>" +
+      recordes.map((r, i) => `${i + 1}. ${r.nome} - ${r.tempo}s`).join("<br>");
   } else {
-    r.textContent = "";
+    r.textContent = "Sem recordes ainda.";
   }
 }
 
