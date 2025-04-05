@@ -1,101 +1,69 @@
+const bitsContainer = document.getElementById("bits");
+const alvoEl = document.getElementById("alvo");
+const numeroEl = document.getElementById("numero");
+const recordeBox = document.getElementById("recordeBox");
+
+let alvo = 0;
 let bits = [];
-let target = 0;
+let tempoInicial = 0;
+let tempoFinal = 0;
 
-const bitContainer = document.getElementById('bits');
-const targetDisplay = document.getElementById('target');
-const currentDisplay = document.getElementById('current');
-const feedback = document.getElementById('feedback');
-const recordForm = document.getElementById('record-form');
-const recordsList = document.getElementById('records');
-
-function createBits() {
-  bitContainer.innerHTML = '';
+function criarBits() {
+  bitsContainer.innerHTML = "";
   bits = [];
-
-  for (let i = 0; i < 8; i++) {
-    const bit = document.createElement('div');
-    bit.classList.add('bit');
-    bit.textContent = '0';
-    bit.onclick = () => toggleBit(i);
-    bitContainer.appendChild(bit);
-    bits.push(0);
-  }
-
-  updateDisplay();
-}
-
-function toggleBit(index) {
-  bits[index] = bits[index] === 0 ? 1 : 0;
-  const bitDiv = bitContainer.children[index];
-  bitDiv.textContent = bits[index];
-  bitDiv.classList.toggle('active', bits[index] === 1);
-  updateDisplay();
-}
-
-function getCurrentValue() {
-  return bits.reduce((acc, bit, i) => {
-    return acc + bit * Math.pow(2, 7 - i);
-  }, 0);
-}
-
-function updateDisplay() {
-  const value = getCurrentValue();
-  currentDisplay.textContent = value;
-
-  if (value === target) {
-    feedback.textContent = "Você acertou!";
-    recordForm.classList.remove('hidden');
-  } else {
-    feedback.textContent = "";
-    recordForm.classList.add('hidden');
+  for (let i = 7; i >= 0; i--) {
+    const bit = document.createElement("div");
+    bit.classList.add("bit");
+    bit.textContent = "0";
+    bit.dataset.valor = i;
+    bit.onclick = () => {
+      bit.textContent = bit.textContent === "0" ? "1" : "0";
+      bit.classList.toggle("on");
+      atualizarNumero();
+    };
+    bits.push(bit);
+    bitsContainer.appendChild(bit);
   }
 }
 
-function generateTarget() {
-  target = Math.floor(Math.random() * 256);
-  targetDisplay.textContent = target;
-  resetBits();
-}
-
-function resetBits() {
-  bits = bits.map(() => 0);
-  for (let i = 0; i < 8; i++) {
-    const bitDiv = bitContainer.children[i];
-    bitDiv.textContent = '0';
-    bitDiv.classList.remove('active');
-  }
-  updateDisplay();
-}
-
-function saveRecord() {
-  const name = document.getElementById('player-name').value.trim();
-  if (name) {
-    const value = getCurrentValue();
-    const record = { name, value, target };
-    const stored = JSON.parse(localStorage.getItem('bitRecords')) || [];
-    stored.unshift(record);
-    localStorage.setItem('bitRecords', JSON.stringify(stored));
-    displayRecords();
-    document.getElementById('player-name').value = '';
-    recordForm.classList.add('hidden');
+function atualizarNumero() {
+  const binario = bits.map(b => b.textContent).join("");
+  const decimal = parseInt(binario, 2);
+  numeroEl.textContent = "Seu número: " + decimal;
+  if (decimal === alvo) {
+    tempoFinal = performance.now();
+    const tempo = ((tempoFinal - tempoInicial) / 1000).toFixed(2);
+    const recorde = JSON.parse(localStorage.getItem("recordeTempo")) || { tempo: Infinity, nome: "" };
+    if (tempo < recorde.tempo) {
+      const nome = prompt("Parabéns! Novo recorde! Digite seu nome:");
+      localStorage.setItem("recordeTempo", JSON.stringify({ tempo, nome }));
+    }
+    mostrarRecorde();
   }
 }
 
-function displayRecords() {
-  const stored = JSON.parse(localStorage.getItem('bitRecords')) || [];
-  recordsList.innerHTML = '';
-  stored.slice(0, 10).forEach((r) => {
-    const li = document.createElement('li');
-    li.textContent = `${r.name} acertou ${r.value} (alvo: ${r.target})`;
-    recordsList.appendChild(li);
+function novoAlvo() {
+  alvo = Math.floor(Math.random() * 256);
+  alvoEl.textContent = "Alvo: " + alvo;
+  resetarBits();
+  tempoInicial = performance.now();
+}
+
+function resetarBits() {
+  bits.forEach(b => {
+    b.textContent = "0";
+    b.classList.remove("on");
   });
+  atualizarNumero();
 }
 
-createBits();
-generateTarget();
-displayRecords();
-
-// PWA support
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
+function mostrarRecorde() {
+  const recorde = JSON.parse(localStorage.getItem("recordeTempo"));
+  if (recorde && recorde.tempo !== Infinity) {
+    recordeBox.textContent = `Recorde: ${recorde.nome} - ${recorde.tempo}s`;
+  }
 }
+
+criarBits();
+novoAlvo();
+mostrarRecorde();
