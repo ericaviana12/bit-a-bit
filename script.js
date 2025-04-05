@@ -1,67 +1,71 @@
-const bitsContainer = document.getElementById("bits");
-const alvoEl = document.getElementById("alvo");
-const numeroEl = document.getElementById("numero");
-const recordeBox = document.getElementById("recordeBox");
-
 let alvo = 0;
-let bits = [];
-let tempoInicial = 0;
-let tempoFinal = 0;
+let inicio;
+let melhorTempo = localStorage.getItem('melhorTempo') || null;
+let melhorJogador = localStorage.getItem('melhorJogador') || null;
+const bitsEl = document.getElementById('bits-container');
 
 function criarBits() {
-  bitsContainer.innerHTML = "";
-  bits = [];
-  for (let i = 7; i >= 0; i--) {
-    const bit = document.createElement("div");
-    bit.classList.add("bit");
+  bitsEl.innerHTML = "";
+  for (let i = 0; i < 8; i++) {
+    const bit = document.createElement('div');
+    bit.classList.add('bit');
     bit.textContent = "0";
-    bit.dataset.valor = i;
     bit.onclick = () => {
       bit.textContent = bit.textContent === "0" ? "1" : "0";
       bit.classList.toggle("on");
       atualizarNumero();
     };
-    bits.push(bit);
-    bitsContainer.appendChild(bit);
+    bitsEl.appendChild(bit);
   }
 }
 
+function binarioParaDecimal(bin) {
+  return parseInt(bin, 2);
+}
+
 function atualizarNumero() {
-  const binario = bits.map(b => b.textContent).join("");
-  const decimal = parseInt(binario, 2);
-  numeroEl.textContent = "Seu número: " + decimal;
-  if (decimal === alvo) {
-    tempoFinal = performance.now();
-    const tempo = ((tempoFinal - tempoInicial) / 1000).toFixed(2);
-    const recorde = JSON.parse(localStorage.getItem("recordeTempo")) || { tempo: Infinity, nome: "" };
-    if (tempo < recorde.tempo) {
+  const bin = Array.from(document.querySelectorAll('.bit')).map(b => b.textContent).join('');
+  const num = binarioParaDecimal(bin);
+  document.getElementById('numero').textContent = "Seu número: " + num;
+
+  if (num === alvo) {
+    const tempo = ((Date.now() - inicio) / 1000).toFixed(2);
+    if (!melhorTempo || tempo < melhorTempo) {
       const nome = prompt("Parabéns! Novo recorde! Digite seu nome:");
-      localStorage.setItem("recordeTempo", JSON.stringify({ tempo, nome }));
+      if (nome) {
+        melhorTempo = tempo;
+        melhorJogador = nome;
+        localStorage.setItem('melhorTempo', tempo);
+        localStorage.setItem('melhorJogador', nome);
+      }
     }
     mostrarRecorde();
   }
 }
 
+function mostrarRecorde() {
+  const r = document.getElementById('recorde-info');
+  if (melhorTempo && melhorJogador) {
+    r.innerHTML = `Recorde: ${melhorTempo}s por ${melhorJogador}`;
+  } else {
+    r.textContent = "";
+  }
+}
+
 function novoAlvo() {
   alvo = Math.floor(Math.random() * 256);
-  alvoEl.textContent = "Alvo: " + alvo;
+  document.getElementById('alvo').textContent = "Alvo: " + alvo;
   resetarBits();
-  tempoInicial = performance.now();
+  inicio = Date.now();
 }
 
 function resetarBits() {
-  bits.forEach(b => {
-    b.textContent = "0";
-    b.classList.remove("on");
+  const bits = document.querySelectorAll('.bit');
+  bits.forEach(bit => {
+    bit.textContent = "0";
+    bit.classList.remove("on");
   });
   atualizarNumero();
-}
-
-function mostrarRecorde() {
-  const recorde = JSON.parse(localStorage.getItem("recordeTempo"));
-  if (recorde && recorde.tempo !== Infinity) {
-    recordeBox.textContent = `Recorde: ${recorde.nome} - ${recorde.tempo}s`;
-  }
 }
 
 criarBits();
