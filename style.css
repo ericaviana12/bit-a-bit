@@ -1,12 +1,12 @@
 body {
   margin: 0;
   font-family: 'Courier New', monospace;
-  background-color: #111111;
+  background-color: #111;
   color: #9ce2d4;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   text-align: center;
 }
 
@@ -16,7 +16,7 @@ main {
 }
 
 h1 {
-  font-size: 2.8rem;
+  font-size: 2.6rem;
   margin-bottom: 0.4em;
   color: #9ce2d4;
 }
@@ -28,32 +28,36 @@ h1 {
 }
 
 #alvo, #numero {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   margin: 1.2rem 0;
-  color: #9ce2d4;
+}
+
+.bits-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
 }
 
 .bits {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  justify-items: center;
-  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
 }
 
 .bit {
   background: #1d1d1d;
   border: 2px solid #333;
   color: #9ce2d4;
-  width: 42px;
-  height: 56px;
+  width: 48px;
+  height: 58px;
   font-size: 1.6rem;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   transition: 0.2s;
-  border-radius: 8px;
+  border-radius: 6px;
   box-shadow: inset 0 0 4px #000;
 }
 
@@ -78,6 +82,13 @@ button:hover {
   background-color: #292929;
   border-color: #9ce2d4;
   color: #ffffff;
+}
+
+#mensagem {
+  font-size: 1.2rem;
+  margin: 10px 0;
+  height: 1.4em;
+  color: #f0f0f0;
 }
 
 .recorde-box {
