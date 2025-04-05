@@ -13,10 +13,19 @@
     <h1>Bit a Bit</h1>
     <p class="sub">Transforme bits em número!</p>
     <div id="alvo">Alvo: 0</div>
-    <div class="bits" id="bits-container"></div>
+
+    <div class="bits-wrapper">
+      <div class="bits" id="bits-top"></div>
+      <div class="bits" id="bits-bottom"></div>
+    </div>
+
     <div id="numero">Seu número: 0</div>
+
+    <div id="mensagem"></div>
+
     <button onclick="novoAlvo()">Novo Alvo</button>
     <button onclick="resetarBits()">Resetar Bits</button>
+
     <div id="recorde-info" class="recorde-box"></div>
   </main>
   <script src="script.js"></script>
