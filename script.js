@@ -30,16 +30,19 @@ function atualizarNumero() {
 
   if (num === alvo) {
     const tempo = ((Date.now() - inicio) / 1000).toFixed(2);
-    if (!melhorTempo || tempo < melhorTempo) {
-      const nome = prompt("Parabéns! Novo recorde! Digite seu nome:");
-      if (nome) {
-        melhorTempo = tempo;
-        melhorJogador = nome;
-        localStorage.setItem('melhorTempo', tempo);
-        localStorage.setItem('melhorJogador', nome);
+    setTimeout(() => {
+      if (!melhorTempo || tempo < melhorTempo) {
+        const nome = prompt("Parabéns! Novo recorde! Digite seu nome:");
+        if (nome) {
+          melhorTempo = tempo;
+          melhorJogador = nome;
+          localStorage.setItem('melhorTempo', tempo);
+          localStorage.setItem('melhorJogador', nome);
+        }
       }
-    }
-    mostrarRecorde();
+      mostrarRecorde();
+      novaRodada();
+    }, 200);
   }
 }
 
@@ -52,7 +55,7 @@ function mostrarRecorde() {
   }
 }
 
-function novoAlvo() {
+function novaRodada() {
   alvo = Math.floor(Math.random() * 256);
   document.getElementById('alvo').textContent = "Alvo: " + alvo;
   resetarBits();
@@ -68,6 +71,10 @@ function resetarBits() {
   atualizarNumero();
 }
 
+function novoAlvo() {
+  novaRodada();
+}
+
 criarBits();
-novoAlvo();
+novaRodada();
 mostrarRecorde();
