@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bit a Bit</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <div class="terminal">
+    <h1>Bit a Bit</h1>
+    <p>Alvo: <span id="target">0</span></p>
+
+    <div id="bits" class="bit-row"></div>
+
+    <p>Seu número: <span id="current">0</span></p>
+    <p id="feedback"></p>
+
+    <button onclick="generateTarget()">Novo Alvo</button>
+    <button onclick="resetBits()">Resetar Bits</button>
+
+    <div id="record-form" class="hidden">
+      <input type="text" id="player-name" placeholder="Seu nome" />
+      <button onclick="saveRecord()">Salvar Recorde</button>
+    </div>
+
+    <h2>Recordes</h2>
+    <ul id="records"></ul>
+  </div>
+</body>
+</html>
