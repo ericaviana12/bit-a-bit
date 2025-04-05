@@ -5,7 +5,7 @@ const alvo = document.getElementById("alvo");
 const mensagem = document.getElementById("mensagem");
 const recordeInfo = document.getElementById("recorde-info");
 
-let bits = [];
+let bits = Array(8).fill(0);
 let numeroAlvo = 0;
 let tempoInicial = null;
 let historicoRecordes = [];
@@ -13,11 +13,12 @@ let historicoRecordes = [];
 function criarBits() {
   bitsTop.innerHTML = '';
   bitsBottom.innerHTML = '';
-  bits = [];
+  bits = Array(8).fill(0);
 
   for (let i = 7; i >= 0; i--) {
     const bit = document.createElement("div");
     bit.classList.add("bit");
+    bit.dataset.index = i;
     bit.dataset.valor = 2 ** i;
     bit.textContent = "0";
     bit.onclick = () => alternarBit(i);
@@ -26,25 +27,26 @@ function criarBits() {
     } else {
       bitsBottom.appendChild(bit);
     }
-    bits[i] = 0;
   }
 
   atualizarNumero();
 }
 
-function alternarBit(posicao) {
-  bits[posicao] = bits[posicao] === 0 ? 1 : 0;
+function alternarBit(index) {
+  bits[index] = bits[index] === 0 ? 1 : 0;
   atualizarNumero();
   verificarAcerto();
 }
 
 function atualizarNumero() {
   let total = 0;
-  document.querySelectorAll(".bit").forEach((bit, i) => {
-    bit.textContent = bits[i];
-    if (bits[i] === 1) {
+  document.querySelectorAll(".bit").forEach((bit) => {
+    const index = parseInt(bit.dataset.index);
+    const valor = parseInt(bit.dataset.valor);
+    bit.textContent = bits[index];
+    if (bits[index] === 1) {
+      total += valor;
       bit.classList.add("on");
-      total += parseInt(bit.dataset.valor);
     } else {
       bit.classList.remove("on");
     }
@@ -62,8 +64,9 @@ function novoAlvo() {
 
 function resetarBits() {
   bits = Array(8).fill(0);
-  document.querySelectorAll(".bit").forEach((bit, i) => {
-    bits[i] = 0;
+  document.querySelectorAll(".bit").forEach((bit) => {
+    const index = parseInt(bit.dataset.index);
+    bits[index] = 0;
     bit.textContent = "0";
     bit.classList.remove("on");
   });
@@ -71,10 +74,10 @@ function resetarBits() {
 }
 
 function verificarAcerto() {
-  let valor = bits.reduce((soma, bit, i) => soma + bit * 2 ** i, 0);
-  if (valor === numeroAlvo) {
-    let tempoFinal = Date.now();
-    let duracao = Math.round((tempoFinal - tempoInicial) / 1000);
+  const total = bits.reduce((soma, bit, i) => soma + bit * 2 ** i, 0);
+  if (total === numeroAlvo) {
+    const tempoFinal = Date.now();
+    const duracao = Math.round((tempoFinal - tempoInicial) / 1000);
     mensagem.textContent = `Você acertou em ${duracao}s!`;
 
     setTimeout(() => {
@@ -85,14 +88,14 @@ function verificarAcerto() {
       }
       mensagem.textContent = '';
       novoAlvo();
-    }, 1500);
+    }, 2000);
   }
 }
 
 function salvarRecorde(nome, tempo) {
   historicoRecordes.push({ nome, tempo });
   historicoRecordes.sort((a, b) => a.tempo - b.tempo);
-  historicoRecordes = historicoRecordes.slice(0, 3); // Só mantém os 3 melhores
+  historicoRecordes = historicoRecordes.slice(0, 3);
   localStorage.setItem("bit-a-bit-recordes", JSON.stringify(historicoRecordes));
 }
 
