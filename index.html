@@ -1,33 +1,27 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bit a Bit</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="theme-color" content="#0d1117" />
   <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
   <script defer src="script.js"></script>
+  <script defer src="service-worker.js"></script>
+  <title>Bit a Bit</title>
 </head>
 <body>
-  <div class="terminal">
+  <main>
     <h1>Bit a Bit</h1>
-    <p>Alvo: <span id="target">0</span></p>
-
-    <div id="bits" class="bit-row"></div>
-
-    <p>Seu número: <span id="current">0</span></p>
-    <p id="feedback"></p>
-
-    <button onclick="generateTarget()">Novo Alvo</button>
-    <button onclick="resetBits()">Resetar Bits</button>
-
-    <div id="record-form" class="hidden">
-      <input type="text" id="player-name" placeholder="Seu nome" />
-      <button onclick="saveRecord()">Salvar Recorde</button>
+    <p class="sub">Transforme bits em número!</p>
+    <div id="alvo"></div>
+    <div id="bits" class="bits"></div>
+    <div id="numero"></div>
+    <div class="botoes">
+      <button onclick="novoAlvo()">Novo Alvo</button>
+      <button onclick="resetarBits()">Resetar Bits</button>
     </div>
-
-    <h2>Recordes</h2>
-    <ul id="records"></ul>
-  </div>
+    <div id="recordeBox" class="recorde-box"></div>
+  </main>
 </body>
 </html>
