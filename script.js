@@ -81,7 +81,7 @@ function verificarAcerto() {
     mensagem.textContent = `Você acertou em ${duracao}s!`;
 
     setTimeout(() => {
-      const nome = prompt("Novo recorde! Digite seu nome:");
+      const nome = prompt("Digite seu nome:");
       if (nome) {
         salvarRecorde(nome, duracao);
         atualizarRecordes();
