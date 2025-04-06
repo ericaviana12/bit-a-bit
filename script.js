@@ -103,7 +103,7 @@ function atualizarRecordes() {
   historicoRecordes = JSON.parse(localStorage.getItem("bit-a-bit-recordes")) || [];
   if (historicoRecordes.length === 0) return;
 
-  recordeInfo.innerHTML = "<strong>Top 3 Recordes:</strong><br/>";
+  recordeInfo.innerHTML = "<strong>Top 10 Recordes:</strong><br/>";
   historicoRecordes.forEach((r, i) => {
     recordeInfo.innerHTML += `${i + 1}. ${r.nome} — ${r.tempo}s<br/>`;
   });
