@@ -95,7 +95,7 @@ function verificarAcerto() {
 function salvarRecorde(nome, tempo) {
   historicoRecordes.push({ nome, tempo });
   historicoRecordes.sort((a, b) => a.tempo - b.tempo);
-  historicoRecordes = historicoRecordes.slice(0, 3);
+  historicoRecordes = historicoRecordes.slice(0, 10);
   localStorage.setItem("bit-a-bit-recordes", JSON.stringify(historicoRecordes));
 }
 
